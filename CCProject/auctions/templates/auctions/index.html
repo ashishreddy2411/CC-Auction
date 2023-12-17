@@ -1,0 +1,29 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="container py-3">
+        <h2 class="mb-4">Active Listings</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for auction in auctions %}
+                <div class="col">
+                    <div class="card h-100 card-hover">
+                        <a href="{% url 'listing' auction.id %}">
+                            <img src="{{ auction.imageURL }}" class="card-img-top card-img-margin" alt="{{ auction.title }}">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{% url 'listing' auction.id %}" class="text-decoration-none text-dark">{{ auction.title }}</a>
+                            </h5>
+                            <p class="card-text">{{ auction.description }}</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Category: {{ auction.category }}</li>
+                            <li class="list-group-item">Current Price: <strong>CAD $ {{ auction.current_bid }}</strong></li>
+                            <li class="list-group-item">Last Updated on: {{ auction.update_date }}</li>
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<div class="container">
+    <h2>My Bids</h2>
+
+    {% if mybiddings %}
+    <div><p>You have bid to {{ Num }} items.</p></div>
+
+    <table class="table table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Auction listing ID</th>
+            <th scope="col">Title</th>
+            <th scope="col">Current Price</th>
+            <th scope="col">Starting Bid</th>
+            <th scope="col">Status</th>
+            <th scope="col">Winning</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for auction in unique_auctions %}
+        
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ auction.id }}</td>
+            <td><a href="{% url 'listing' auction.id %}" style="color: inherit;">{{ auction.title }}</a></td>
+            <td>{{ auction.current_bid }}</td>
+            <td>{{ auction.starting_bid }}</td>
+            <td>
+                {% if auction.closed %}
+                    Closed
+                {% else %}
+                    Active
+                {% endif %}
+            </td>
+            <td>
+              {% for id, flag in auction_status_dict.items %}
+              {% if id == auction.id  %}
+              {% if flag and auction.closed %}
+              <span class="badge badge-success" id="status">Won</span>
+              {% elif flag and not auction.closed %}
+              <span class="badge badge-info" id="status">Winning</span>
+              {% elif not flag and auction.closed %}
+              <span class="badge badge-danger" id="status">Lost</span>
+              {% elif not flag and not auction.closed %}
+              <span class="badge badge-danger" id="status">Losing</span>
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+          </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+      {% else %}
+
+      <p>No items in your Bidding list.</p>
+
+      {% endif %}
+      
+</div>
+    
+{% endblock %}
